@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clear Papers - VIT PYQ</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        button {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0.5rem;
+        }
+
+        button:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .success {
+            background: #10b981;
+        }
+
+        .success:hover {
+            background: #059669;
+        }
+
+        .back-btn {
+            background: #6366f1;
+        }
+
+        .back-btn:hover {
+            background: #4f46e5;
+        }
+
+        #message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            display: none;
+        }
+
+        .success-msg {
+            background: #d1fae5;
+            color: #065f46;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🗑️ Clear All Papers</h1>
+        <p>This will remove all uploaded papers from the VIT PYQ platform. This action cannot be undone.</p>
+
+        <button onclick="clearPapers()">Clear All Papers</button>
+        <button class="back-btn" onclick="goBack()">Go Back to PYQ</button>
+
+        <div id="message"></div>
+    </div>
+
+    <script>
+        function clearPapers() {
+            if (confirm('Are you sure you want to delete ALL papers? This cannot be undone!')) {
+                // Clear papers from localStorage
+                localStorage.setItem('papers', JSON.stringify([]));
+
+                // Show success message
+                const message = document.getElementById('message');
+                message.className = 'success-msg';
+                message.style.display = 'block';
+                message.innerHTML = '✅ All papers have been cleared successfully!<br><br>Refresh the PYQ page to see changes.';
+
+                console.log('Papers cleared from localStorage');
+            }
+        }
+
+        function goBack() {
+            window.location.href = 'pyq.html';
+        }
+    </script>
+</body>
+
+</html>
