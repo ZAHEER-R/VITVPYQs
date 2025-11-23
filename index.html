@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" type="image/png/jpg" sizes="32x32" href="favicon.jpg">
+    <link rel="icon" type="image/png/jpg" sizes="16x16" href="favicon.jpg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIT PYQ's</title>
+    <link rel="stylesheet" href="pyq.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/efc246ce45.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- Interactive Background Bubbles -->
+    <canvas id="bubbleCanvas"></canvas>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div class="vit-logo">VIT</div>
+                <a href="#" class="logo" onclick="showPage('home')">PYQ's</a>
+            </div>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            <div class="nav-links" id="navLinks">
+                <!-- Injected by JS -->
+            </div>
+        </div>
+    </nav>
+
+    <main class="container" style="margin-top: 80px;">
+        <!-- Auth Section -->
+        <section id="authSection" class="page-section hidden auth-container">
+            <div class="card auth-card">
+                <h2 id="authTitle">Welcome Vitians</h2>
+                <form id="authForm">
+                    <div id="signupFields" class="hidden">
+                        <div class="grid-2">
+                            <input type="text" id="firstName" placeholder="First Name">
+                            <input type="text" id="lastName" placeholder="Last Name">
+                        </div>
+                        <input type="tel" id="phone" placeholder="Phone Number">
+                    </div>
+                    <input type="email" id="email" placeholder="Email Address" required>
+                    <input type="password" id="password" placeholder="Password" required>
+                    <button type="submit" class="btn btn-primary full-width">
+                        <span id="authBtnText">Login</span>
+                    </button>
+                </form>
+
+                <button onclick="continueAsGuest()" class="btn btn-outline full-width mt-4">
+                    Continue as Guest
+                </button>
+
+                <p class="text-center mt-4">
+                    <span id="authSwitchText">Don't have an account?</span>
+                    <a href="#" class="text-primary" onclick="toggleAuthMode()">
+                        <span id="authSwitchLink">Sign Up</span>
+                    </a>
+                </p>
+            </div>
+        </section>
+
+        <!-- Home Section -->
+        <section id="homeSection" class="page-section">
+            <div class="hero">
+                <h1>Find Your Questions</h1>
+                <p>Search through thousands of previous year question papers shared by students.</p>
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Search by Subject,Course Code, Slot"
+                        oninput="handleSearch()">
+                    <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                </div>
+            </div>
+
+            <div id="papersGrid" class="grid-3">
+                <!-- Papers injected by JS -->
+            </div>
+        </section>
+
+        <!-- Upload Section -->
+        <section id="uploadSection" class="page-section hidden">
+            <div class="card upload-card">
+                <h2>Upload PYQ Paper</h2>
+                <form id="uploadForm">
+                    <div class="grid-2">
+                        <input type="text" id="upSubject" placeholder="Subject Name" required>
+                        <input type="text" id="upCourse" placeholder="Course Code" required>
+                    </div>
+                    <div class="grid-2">
+                        <input type="text" id="upYear" placeholder="Exam Year (e.g. 2023)" required>
+                        <input type="text" id="upSlot" placeholder="Slot (e.g. A1, B1)" required>
+                    </div>
+                    <div class="grid-2">
+                        <input type="text" id="upSemester" placeholder="Semester (e.g. Fall 2023)" required>
+                        <select id="upCategory">
+                            <option value="CAT1">CAT 1</option>
+                            <option value="CAT2">CAT 2</option>
+                            <option value="FAT">FAT</option>
+                        </select>
+                    </div>
+
+                    <div class="file-drop-area">
+                        <input type="file" id="fileInput" accept=".pdf,.jpg,.png" required
+                            onchange="handleFileSelect(event)">
+                        <p>Click to upload PDF or Image</p>
+                    </div>
+
+                    <div id="imagePreviewContainer" class="hidden" style="margin-bottom: 1rem; text-align: center;">
+                        <img id="imagePreview" src="" alt="Preview"
+                            style="max-width: 100%; max-height: 300px; border-radius: 0.5rem; border: 1px solid #334155;">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary full-width">Upload Paper (+50 Points)</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profileSection" class="page-section hidden">
+            <div class="card profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar-container">
+                        <div class="profile-avatar" id="profileAvatar">U</div>
+                        <label for="profilePicInput" class="avatar-edit-btn">📷</label>
+                        <input type="file" id="profilePicInput" accept="image/*" hidden
+                            onchange="handleProfilePicUpdate(event)">
+                    </div>
+
+                    <div class="profile-info-edit">
+                        <h2 id="profileName">User Name</h2>
+                        <button class="btn-icon" onclick="enableNameEdit()">✎</button>
+                    </div>
+                    <div id="nameEditForm" class="hidden" style="margin-bottom: 1rem;">
+                        <input type="text" id="editFirstName" placeholder="First Name" style="margin-bottom: 0.5rem;">
+                        <input type="text" id="editLastName" placeholder="Last Name" style="margin-bottom: 0.5rem;">
+                        <button class="btn btn-sm btn-primary" onclick="saveNameEdit()">Save</button>
+                        <button class="btn btn-sm btn-outline" onclick="cancelNameEdit()">Cancel</button>
+                    </div>
+
+                    <p id="profileEmail" class="text-muted">user@example.com</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <p>Current Level</p>
+                        <h3 id="profileLevel">🥈 Silver</h3>
+                    </div>
+                    <div class="stat-box">
+                        <p>Contribution Points</p>
+                        <h3 id="profilePoints">0</h3>
+                    </div>
+                    <div class="stat-box">
+                        <p>Papers Uploaded</p>
+                        <h3 id="profileUploads" style="color: #3b82f6;">0</h3>
+                    </div>
+                    <div class="stat-box">
+                        <p>Papers Downloaded</p>
+                        <h3 id="profileDownloads" style="color: #8b5cf6;">0</h3>
+                    </div>
+                </div>
+
+                <div class="liked-section mt-4">
+                    <h3 style="border-bottom: 1px solid #334155; padding-bottom: 0.5rem; margin-bottom: 1rem;">❤️ Liked
+                        Papers</h3>
+                    <div id="likedPapersGrid" class="grid-1">
+                        <!-- Liked papers injected here -->
+                        <p class="text-muted text-center">No liked papers yet.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="grid-3 footer-grid">
+                <div class="footer-col">
+                    <h3>VIT PYQ's</h3>
+                    <p class="text-muted">The best platform for VIT students to share and find previous year question
+                        papers.</p>
+                    <p>Made for Vitians by Vitian</p>
+                    <p>keep supporting our community by uploading papers on this site.</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact Developer</h3>
+                    <a href="mailto:zaheerrachakula@gmail.com" class="btn btn-primary btn-sm"
+                        style="text-decoration: none; display: inline-block; margin-bottom: 0.5rem;">
+                        Email
+                    </a>
+                </div>
+                <div class="footer-col">
+                    <h3>FAQ</h3>
+                    <button class="btn btn-outline btn-sm full-width" style="margin-bottom: 0.5rem; text-align: left;"
+                        onclick="alert('Login -> Go to Upload -> Fill Details -> Select File')">
+                        How do I upload?
+                    </button>
+                    <details>
+                        <summary>What about levels?</summary>
+                        <p class="text-muted text-sm">
+                            Silver: 0-1000 pts<br>
+                            Gold: 1000-2000 pts<br>
+                            Diamond: 2000-4000 pts<br>
+                            Legendary: 4000+ pts
+                        </p>
+                    </details>
+                    <details>
+                        <summary>How to get points?</summary>
+                        <p class="text-muted text-sm">Upload papers to earn 50 points per upload.</p>
+                    </details>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Made with ❤️ by <span style="color: var(--primary); font-weight: bold;">VITian</span></p>
+                <p class="copyright">© 2024 VITPYQ. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Full Screen Image Modal -->
+    <div id="imageModal" class="modal hidden" onclick="closeModal(event)">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal(event)">&times;</span>
+            <img id="modalImage" src="" alt="Full Paper">
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="modalLikeBtn" onclick="toggleLikeFromModal()">❤️ Like</button>
+                <button class="btn btn-primary" onclick="downloadFromModal()">⬇️ Download</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="pyq.js"></script>
+</body>
+
+
+</html>
+
